@@ -644,29 +644,40 @@ class HTMLLogFile:
         self.step = parent
         self.name = name
         self.filename = logfilename
-        self.html = html
+        with open(self.getFilename(), 'w') as f:
+            f.write(html)
 
     def getName(self):
         return self.name # set in BuildStepStatus.addLog
+
     def getStep(self):
         return self.step
 
+    def getFilename(self):
+        return os.path.join(self.step.build.builder.basedir, self.filename)
+
     def isFinished(self):
         return True
+
     def waitUntilFinished(self):
         return defer.succeed(self)
 
     def hasContents(self):
         return True
+
     def getText(self):
-        return self.html # looks kinda like text
+        with open(self.getFilename()) as f:
+            return f.read()
+
     def getTextWithHeaders(self):
-        return self.html
+        return self.getText()
+
     def getChunks(self):
-        return [(STDERR, self.html)]
+        return [(STDERR, self.getText())]
 
     def subscribe(self, receiver, catchup):
         pass
+
     def unsubscribe(self, receiver):
         pass
 

@@ -156,7 +156,7 @@ class HTMLLog(Resource):
 
     def render(self, request):
         request.setHeader("content-type", "text/html")
-        return self.original.html
+        return self.original.getText()
 
 components.registerAdapter(HTMLLog, logfile.HTMLLogFile, IHTMLLog)
 
